@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
-import "./Nav.css"
+import "./Nav.css";
 
 function Nav({ dogList }) {
   return (
-    <navbar className="Navbar">
+    <nav className="Navbar">
       <h1>Dogfinder</h1>
       <div className="Navbar-links">
-        {dogList.map(dog => <Link to={`/dogs/${dog.name}`}>{dog.name}</Link>)}
+        {dogList.map(dog => <Link key={dog.name} to={`/dogs/${dog.name}`}>{dog.name}</Link>)}
       </div>
-    </navbar>
+    </nav>
   );
 }
 
