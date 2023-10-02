@@ -3,6 +3,8 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DogList from './DogList';
 import DogDetails from './DogDetails';
+import Nav from './Nav';
+
 const DOG_LIST = [{
   "name": "Whiskey",
   "age": 5,
@@ -38,7 +40,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Nav />
+        <Nav dogList={DOG_LIST}/>
         <Routes>
           <Route element={<DogList dogList={DOG_LIST} />} path="/" />
           <Route element={<DogDetails dogList={DOG_LIST} />} path="/dogs/:name" />
