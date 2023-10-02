@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-
+import { getSource } from "./dog";
 
 function DogDetails({ dogList }) {
   const { name } = useParams();
@@ -11,7 +11,8 @@ function DogDetails({ dogList }) {
 
   return (
     <div>
-      <div style={{ backgroundImage: `url(${dog.src})` }}>
+      <div >
+      <img src={getSource(dog.src)}></img>
       </div>
       <h3>{dog.name}</h3>
       <h4>Age: {dog.age}</h4>

@@ -1,9 +1,11 @@
 import './App.css';
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import DogList from './DogList';
 import DogDetails from './DogDetails';
 import Nav from './Nav';
+import { getDogList } from './dog';
+import Loading from './Loading';
 
 
 const DOG_LIST = [{
@@ -37,14 +39,39 @@ const DOG_LIST = [{
   ]
 }];
 
+let dogList;
+
 function App() {
+  const [haveDogs, setHaveDogs] = useState(null);
+
+  if (haveDogs === null){
+    dogList = getDogList();
+    setHaveDogs(curr => false);
+  }
+  console.log("doglist before loading", dogList, "haveDogs", haveDogs)
+
+  function updateDoglistStatus() {
+    console.log("dogList in update function", dogList, "haveDogs", haveDogs)
+    if (!(dogList instanceof Promise)) setHaveDogs(curr => true);
+    return;
+  }
+
+  if (!haveDogs) {
+    return <Loading haveDogs={haveDogs} update={updateDoglistStatus} />;
+  }
+  console.log("doglist after loading", dogList, "haveDogs", haveDogs)
+
   return (
     <div className="App">
       <BrowserRouter>
-        <Nav dogList={DOG_LIST} />
+        <Nav dogList={dogList} />
         <Routes>
-          <Route element={<DogList dogList={DOG_LIST} />} path="/dogs" />
-          <Route element={<DogDetails dogList={DOG_LIST} />} path="/dogs/:name" />
+          <Route element={
+            <DogList
+              dogList={dogList}
+              haveDogs={haveDogs}
+              update={updateDoglistStatus} />} path="/dogs" />
+          <Route element={<DogDetails dogList={dogList} />} path="/dogs/:name" />
         </Routes>
       </BrowserRouter>
     </div>

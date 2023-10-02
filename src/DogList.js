@@ -1,18 +1,8 @@
 import React from "react";
-import duke from "./duke.jpg";
-import whiskey from "./whiskey.jpg";
-import perry from "./perry.jpg";
-
+import { getSource } from "./dog";
 
 function DogList({ dogList }) {
 
-  function getSource(name) {
-    let src;
-    if (name === "duke") src = duke;
-    if (name === "whiskey") src = whiskey;
-    if (name === "perry") src = perry;
-    return src;
-  }
   return (
     <div className="DogList">
       {dogList.map(dog =>
