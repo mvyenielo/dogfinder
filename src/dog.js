@@ -1,23 +1,33 @@
-import duke from "./duke.jpg";
-import whiskey from "./whiskey.jpg";
-import perry from "./perry.jpg";
+// import duke from "./duke.jpg";
+// import whiskey from "./whiskey.jpg";
+// import perry from "./perry.jpg";
 
 const BASE_URL = "http://localhost:5001/dogs";
 
-async function getDogList() {
+/**
+ * Fetch dogs from API
+ *
+ */
+
+async function fetchDogList() {
   const response = await fetch(BASE_URL);
-  console.log("you called fetch!")
+  console.log("you called fetch!");
   const dogList = await response.json();
-  console.log("resonse json=", dogList)
+  console.log("resonse json=", dogList);
   return dogList;
 }
 
-function getSource(name) {
-  let src;
-  if (name === "duke") src = duke;
-  if (name === "whiskey") src = whiskey;
-  if (name === "perry") src = perry;
-  return src;
-}
+/**
+ * Sets src for images of each dog
+ *
+ */
 
-export { getSource, getDogList };
+// function getSource(name) {
+//   let src;
+//   if (name === "duke") src = duke;
+//   if (name === "whiskey") src = whiskey;
+//   if (name === "perry") src = perry;
+//   return src;
+// }
+
+export { fetchDogList };

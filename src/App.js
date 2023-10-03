@@ -4,73 +4,50 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import DogList from './DogList';
 import DogDetails from './DogDetails';
 import Nav from './Nav';
-import { getDogList } from './dog';
+import { fetchDogList } from './dog';
 import Loading from './Loading';
 
 
-const DOG_LIST = [{
-  "name": "Whiskey",
-  "age": 5,
-  "src": "whiskey",
-  "facts": [
-    "Whiskey loves eating popcorn.",
-    "Whiskey is a terrible guard dog.",
-    "Whiskey wants to cuddle with you!"
-  ]
-},
-{
-  "name": "Duke",
-  "age": 3,
-  "src": "duke",
-  "facts": [
-    "Duke believes that ball is life.",
-    "Duke likes snow.",
-    "Duke enjoys pawing other dogs."
-  ]
-},
-{
-  "name": "Perry",
-  "age": 4,
-  "src": "perry",
-  "facts": [
-    "Perry loves all humans.",
-    "Perry demolishes all snacks.",
-    "Perry hates the rain."
-  ]
-}];
+/** App for Dogfinder
+ *
+ * Depending on path, show different components
+*
+* State:
+* - haveDogs: indicates whether list of dogs has been returned from
+*   fetch request
+*
+* App => {Loading, Nav, DogList, DogDetails}
+*
+*/
 
+//TODO: doglist as own piece of state rather than global variable
+// could have two pieces of state OR start haveDogs as null OR state as object
+// that holds isLoading and haveDogs
 let dogList;
 
 function App() {
-  const [haveDogs, setHaveDogs] = useState(null);
+  const [haveDogs, setHaveDogs] = useState(false);
 
-  if (haveDogs === null){
-    dogList = getDogList();
-    setHaveDogs(curr => false);
-  }
-  console.log("doglist before loading", dogList, "haveDogs", haveDogs)
-
-  function updateDoglistStatus() {
-    console.log("dogList in update function", dogList, "haveDogs", haveDogs)
-    if (!(dogList instanceof Promise)) setHaveDogs(curr => true);
-    return;
+  /** Gets dog list and sets haveDogs state to true */
+  async function getDogList() {
+    const response = await fetchDogList();
+    setHaveDogs(curr => true);
+    dogList = response;
   }
 
   if (!haveDogs) {
-    return <Loading haveDogs={haveDogs} update={updateDoglistStatus} />;
+    getDogList();
+    return <Loading />;
   }
-  console.log("doglist after loading", dogList, "haveDogs", haveDogs)
 
+  //TODO: redirect to home page if they hit "/", use Navigate /*
   return (
     <div className="App">
       <BrowserRouter>
         <Nav dogList={dogList} />
         <Routes>
           <Route element={
-            <DogList
-              dogList={dogList}
-              haveDogs={haveDogs}
-              update={updateDoglistStatus} />} path="/dogs" />
+            <DogList dogList={dogList} />} path="/dogs" />
           <Route element={<DogDetails dogList={dogList} />} path="/dogs/:name" />
         </Routes>
       </BrowserRouter>
